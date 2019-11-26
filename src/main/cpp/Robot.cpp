@@ -9,6 +9,9 @@
 
 #include <frc/commands/Scheduler.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/drive/MecanumDrive.h>
+#include <frc/Spark.h>
+#include <frc/XboxController.h>
 
 ExampleSubsystem Robot::m_subsystem;
 OI Robot::m_oi;
@@ -17,6 +20,8 @@ void Robot::RobotInit() {
   m_chooser.SetDefaultOption("Default Auto", &m_defaultAuto);
   m_chooser.AddOption("My Auto", &m_myAuto);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+  m_frontLeft.SetInverted(true);
+  m_rearLeft.SetInverted(true);
 }
 
 /**
@@ -78,7 +83,11 @@ void Robot::TeleopInit() {
   }
 }
 
-void Robot::TeleopPeriodic() { frc::Scheduler::GetInstance()->Run(); }
+void Robot::TeleopPeriodic() { 
+  frc::Scheduler::GetInstance()->Run(); 
+  m_robotDrive.DriveCartesian(m_stick.GetX(frc::XboxController::JoystickHand::kLeftHand), m_stick.GetY(frc::XboxController::JoystickHand::kLeftHand), m_stick.GetX(frc::XboxController::JoystickHand::kRightHand));
+
+}
 
 void Robot::TestPeriodic() {}
 

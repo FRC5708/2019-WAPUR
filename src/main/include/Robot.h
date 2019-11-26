@@ -10,6 +10,9 @@
 #include <frc/TimedRobot.h>
 #include <frc/commands/Command.h>
 #include <frc/smartdashboard/SendableChooser.h>
+#include <frc/Spark.h>
+#include <frc/XboxController.h>
+#include <frc/drive/MecanumDrive.h>
 
 #include "OI.h"
 #include "commands/ExampleCommand.h"
@@ -32,6 +35,21 @@ class Robot : public frc::TimedRobot {
   void TestPeriodic() override;
 
  private:
+  static constexpr int kFrontLeftChannel = 0;
+  static constexpr int kRearLeftChannel = 1;
+  static constexpr int kFrontRightChannel = 2;
+  static constexpr int kRearRightChannel = 3;
+
+  static constexpr int kJoystickChannel = 0;
+
+  frc::Spark m_frontLeft{kFrontLeftChannel};
+  frc::Spark m_rearLeft{kRearLeftChannel};
+  frc::Spark m_frontRight{kFrontRightChannel};
+  frc::Spark m_rearRight{kRearRightChannel};
+  frc::MecanumDrive m_robotDrive{m_frontLeft, m_rearLeft, m_frontRight,
+                                 m_rearRight};
+
+  frc::XboxController m_stick{kJoystickChannel};
   // Have it null by default so that if testing teleop it
   // doesn't have undefined behavior and potentially crash.
   frc::Command* m_autonomousCommand = nullptr;
