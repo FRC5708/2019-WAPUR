@@ -22,6 +22,20 @@ void Robot::RobotInit() {
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
   m_frontLeft.SetInverted(true);
   m_rearLeft.SetInverted(true);
+
+}
+
+double inputTransform(double input, double minPowerOutput, double inputDeadZone, bool squareInput = true) {
+
+	double output = (fabs(input) - inputDeadZone) / (1 - inputDeadZone);
+	
+	if (output <= 0) return 0;
+
+  if (squareInput) output = output*output;
+  output = output*(1 - minPowerOutput) + minPowerOutput;
+
+	if (input < 0) output = -output;
+	return output;
 }
 
 /**
@@ -84,8 +98,13 @@ void Robot::TeleopInit() {
 }
 
 void Robot::TeleopPeriodic() { 
-  frc::Scheduler::GetInstance()->Run(); 
-  m_robotDrive.DriveCartesian(m_stick.GetX(frc::XboxController::JoystickHand::kLeftHand), m_stick.GetY(frc::XboxController::JoystickHand::kLeftHand), m_stick.GetX(frc::XboxController::JoystickHand::kRightHand));
+  frc::Scheduler::GetInstance()->Run();
+
+
+  m_robotDrive.DriveCartesian(
+    inputTransform(m_stick.GetX(frc::XboxController::JoystickHand::kLeftHand), 0.15, 0.1),
+    inputTransform(m_stick.GetY(frc::XboxController::JoystickHand::kLeftHand), 0.15, 0.1),
+    inputTransform(m_stick.GetX(frc::XboxController::JoystickHand::kRightHand), 0.15, 0.1));
 
 }
 
