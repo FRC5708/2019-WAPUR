@@ -18,7 +18,10 @@
 #include "commands/ExampleCommand.h"
 #include "commands/MyAutoCommand.h"
 #include "subsystems/ExampleSubsystem.h"
-
+struct translation{
+  double x;
+  double y;
+};
 class Robot : public frc::TimedRobot {
  public:
   static ExampleSubsystem m_subsystem;

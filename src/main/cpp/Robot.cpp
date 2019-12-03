@@ -5,6 +5,8 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+#include <iostream>
+
 #include "Robot.h"
 
 #include <frc/commands/Scheduler.h>
@@ -37,7 +39,16 @@ double inputTransform(double input, double minPowerOutput, double inputDeadZone,
 	if (input < 0) output = -output;
 	return output;
 }
-
+translation renormalizeDeadzone(translation input, double input_threshold, double minimum_power_output){
+  if((input.x*input.x + input.y*input.y) <= input_threshold*input_threshold){//Our input is within the zone of death
+    return translation{0,0};
+  }
+  double renorm_x=input.x / (1-input_threshold); //Create linear mapping from 0 to 1 after threshold to boundary
+  double renorm_y=input.y / (1-input_threshold);
+  double resize_x=renorm_x * (1-minimum_power_output) + copysign(minimum_power_output,input.x); //Semi-linear transform from [0,1] => [min_power_output,1]
+  double resize_y=renorm_y * (1-minimum_power_output) + copysign(minimum_power_output,input.y);
+  return translation{resize_x,resize_y};
+}
 /**
  * This function is called every robot packet, no matter the mode. Use
  * this for items like diagnostics that you want ran during disabled,
@@ -99,12 +110,19 @@ void Robot::TeleopInit() {
 
 void Robot::TeleopPeriodic() { 
   frc::Scheduler::GetInstance()->Run();
-
-
+  double joy_x=m_stick.GetX(frc::XboxController::JoystickHand::kLeftHand);
+  double joy_y=m_stick.GetY(frc::XboxController::JoystickHand::kLeftHand);
+  translation input{joy_x,joy_y};
+  translation renormalized_input=renormalizeDeadzone(input,.25,.2); //TODO: change .1, .1
   m_robotDrive.DriveCartesian(
-    inputTransform(m_stick.GetX(frc::XboxController::JoystickHand::kLeftHand), 0.15, 0.1),
-    inputTransform(m_stick.GetY(frc::XboxController::JoystickHand::kLeftHand), 0.15, 0.1),
+    renormalized_input.x,
+    renormalized_input.y,
     inputTransform(m_stick.GetX(frc::XboxController::JoystickHand::kRightHand), 0.15, 0.1));
+  
+  std::cout << "@fl: " << m_frontLeft.Get() << std::endl;
+  std::cout << "@fr: " << m_frontRight.Get() << std::endl;
+  std::cout << "@rl: " << m_rearLeft.Get() << std::endl;
+  std::cout << "@rr: " << m_rearRight.Get() << std::endl;
 
 }
 
