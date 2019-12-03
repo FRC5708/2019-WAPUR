@@ -20,14 +20,13 @@ void Robot::RobotInit() {
   m_chooser.SetDefaultOption("Default Auto", &m_defaultAuto);
   m_chooser.AddOption("My Auto", &m_myAuto);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
-  m_frontLeft.SetInverted(true);
-  m_rearLeft.SetInverted(true);
 
 }
 
-double inputTransform(double input, double minPowerOutput, double inputDeadZone, bool squareInput = true) {
+double inputTransform(double input, double minPowerOutput, double inputRangeLow, double inputRangeHigh = 1, bool squareInput = true) {
 
-	double output = (fabs(input) - inputDeadZone) / (1 - inputDeadZone);
+	double output = (fabs(input) - inputRangeLow) / (inputRangeHigh - inputRangeLow);
+  if (output > 1) output = 1;
 	
 	if (output <= 0) return 0;
 
@@ -102,9 +101,10 @@ void Robot::TeleopPeriodic() {
 
 
   m_robotDrive.DriveCartesian(
-    inputTransform(m_stick.GetX(frc::XboxController::JoystickHand::kLeftHand), 0.15, 0.1),
-    inputTransform(m_stick.GetY(frc::XboxController::JoystickHand::kLeftHand), 0.15, 0.1),
-    inputTransform(m_stick.GetX(frc::XboxController::JoystickHand::kRightHand), 0.15, 0.1));
+    inputTransform(m_stick.GetX(frc::XboxController::JoystickHand::kLeftHand), 0.15, 0.15),
+    -inputTransform(m_stick.GetTriggerAxis(frc::XboxController::JoystickHand::kRightHand) 
+    - m_stick.GetTriggerAxis(frc::XboxController::JoystickHand::kLeftHand), 0.15, 0.15),
+    inputTransform(m_stick.GetX(frc::XboxController::JoystickHand::kRightHand), 0.15, 0.15));
 
 }
 
