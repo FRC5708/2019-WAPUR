@@ -23,7 +23,7 @@ void Robot::RobotInit() {
 
 }
 
-double inputTransform(double input, double minPowerOutput, double inputRangeLow, double inputRangeHigh = 1, bool squareInput = true) {
+double removeDeadzone(double input, double inputRangeLow, double inputRangeHigh = 1, bool squareInput = true) {
 
 	double output = (fabs(input) - inputRangeLow) / (inputRangeHigh - inputRangeLow);
   if (output > 1) output = 1;
@@ -31,7 +31,6 @@ double inputTransform(double input, double minPowerOutput, double inputRangeLow,
 	if (output <= 0) return 0;
 
   if (squareInput) output = output*output;
-  output = output*(1 - minPowerOutput) + minPowerOutput;
 
 	if (input < 0) output = -output;
 	return output;
@@ -101,10 +100,10 @@ void Robot::TeleopPeriodic() {
 
 
   m_robotDrive.DriveCartesian(
-    inputTransform(m_stick.GetX(frc::XboxController::JoystickHand::kLeftHand), 0.15, 0.15),
-    -inputTransform(m_stick.GetTriggerAxis(frc::XboxController::JoystickHand::kRightHand) 
-    - m_stick.GetTriggerAxis(frc::XboxController::JoystickHand::kLeftHand), 0.15, 0.15),
-    inputTransform(m_stick.GetX(frc::XboxController::JoystickHand::kRightHand), 0.15, 0.15));
+    removeDeadzone(m_stick.GetX(frc::XboxController::JoystickHand::kLeftHand), 0.15),
+    -removeDeadzone(m_stick.GetTriggerAxis(frc::XboxController::JoystickHand::kRightHand) 
+    - m_stick.GetTriggerAxis(frc::XboxController::JoystickHand::kLeftHand), 0.15),
+    removeDeadzone(m_stick.GetX(frc::XboxController::JoystickHand::kRightHand), 0.15));
 
 }
 

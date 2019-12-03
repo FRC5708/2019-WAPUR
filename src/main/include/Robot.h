@@ -19,6 +19,21 @@
 #include "commands/MyAutoCommand.h"
 #include "subsystems/ExampleSubsystem.h"
 
+
+template<class BaseMotor>
+class MinOutputMotor : public BaseMotor {
+public:
+  double minPower = 0;
+
+  MinOutputMotor(int channel, double minPower = 0.15): BaseMotor(channel), minPower(minPower) {};
+
+  void Set(double val) {
+    if (val == 0) BaseMotor::Set(0);
+    else BaseMotor::Set(val * (1 - minPower) + minPower);
+  }
+};
+
+
 class Robot : public frc::TimedRobot {
  public:
   static ExampleSubsystem m_subsystem;
@@ -42,10 +57,10 @@ class Robot : public frc::TimedRobot {
 
   static constexpr int kJoystickChannel = 0;
 
-  frc::Spark m_frontLeft{kFrontLeftChannel};
-  frc::Spark m_rearLeft{kRearLeftChannel};
-  frc::Spark m_frontRight{kFrontRightChannel};
-  frc::Spark m_rearRight{kRearRightChannel};
+  MinOutputMotor<frc::Spark> m_frontLeft = MinOutputMotor<frc::Spark>(kFrontLeftChannel);
+  MinOutputMotor<frc::Spark> m_rearLeft = MinOutputMotor<frc::Spark>(kRearLeftChannel);
+  MinOutputMotor<frc::Spark> m_frontRight = MinOutputMotor<frc::Spark>(kFrontRightChannel);
+  MinOutputMotor<frc::Spark> m_rearRight = MinOutputMotor<frc::Spark>(kRearRightChannel);
   frc::MecanumDrive m_robotDrive{m_frontLeft, m_rearLeft, m_frontRight,
                                  m_rearRight};
 
