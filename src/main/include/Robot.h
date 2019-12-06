@@ -54,13 +54,15 @@ class Robot : public frc::TimedRobot {
   static constexpr int kRearLeftChannel = 1;
   static constexpr int kFrontRightChannel = 2;
   static constexpr int kRearRightChannel = 3;
-
+  static constexpr int winchChannel = 4;
   static constexpr int kJoystickChannel = 0;
 
   MinOutputMotor<frc::Spark> m_frontLeft = MinOutputMotor<frc::Spark>(kFrontLeftChannel);
   MinOutputMotor<frc::Spark> m_rearLeft = MinOutputMotor<frc::Spark>(kRearLeftChannel);
   MinOutputMotor<frc::Spark> m_frontRight = MinOutputMotor<frc::Spark>(kFrontRightChannel);
   MinOutputMotor<frc::Spark> m_rearRight = MinOutputMotor<frc::Spark>(kRearRightChannel);
+  MinOutputMotor<frc::Spark> m_winch = MinOutputMotor<frc::Spark>(winchChannel,.15);
+
   frc::MecanumDrive m_robotDrive{m_frontLeft, m_rearLeft, m_frontRight,
                                  m_rearRight};
 

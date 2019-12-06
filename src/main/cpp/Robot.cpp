@@ -13,6 +13,9 @@
 #include <frc/Spark.h>
 #include <frc/XboxController.h>
 
+#define leftHand frc::XboxController::JoystickHand::kLeftHand
+#define rightHand frc::XboxController::JoystickHand::kRightHand
+
 ExampleSubsystem Robot::m_subsystem;
 OI Robot::m_oi;
 
@@ -100,12 +103,17 @@ void Robot::TeleopPeriodic() {
 
 
   m_robotDrive.DriveCartesian(
-    removeDeadzone(m_stick.GetX(frc::XboxController::JoystickHand::kLeftHand), 0.15),
-    -removeDeadzone(m_stick.GetTriggerAxis(frc::XboxController::JoystickHand::kRightHand) 
-    - m_stick.GetTriggerAxis(frc::XboxController::JoystickHand::kLeftHand), 0.15),
-    removeDeadzone(m_stick.GetX(frc::XboxController::JoystickHand::kRightHand), 0.15));
+    removeDeadzone(m_stick.GetX(leftHand), 0.15),
+    -removeDeadzone(m_stick.GetTriggerAxis(rightHand) 
+    - m_stick.GetTriggerAxis(leftHand), 0.15),
+    removeDeadzone(m_stick.GetX(rightHand), 0.15)
+    );
+  if(m_stick.GetBumper(leftHand)) m_winch.Set(1);
+  else if(m_stick.GetBumper(rightHand)) m_winch.Set(-1);
+  else m_winch.Set(0);
 
 }
+
 
 void Robot::TestPeriodic() {}
 
