@@ -59,7 +59,7 @@ class Robot : public frc::TimedRobot {
   static constexpr int kRearLeftChannel = 1;
   static constexpr int kFrontRightChannel = 2;
   static constexpr int kRearRightChannel = 3;
-
+  static constexpr int winchChannel = 4;
   static constexpr int kJoystickChannel = 0;
 
   MinOutputMotor<frc::Spark> m_frontLeft = MinOutputMotor<frc::Spark>(kFrontLeftChannel);
