@@ -7,11 +7,23 @@
 
 #pragma once
 
-#include <frc/commands/Command.h>
+#include <memory>
 
-class MyAutoCommand : public frc::Command {
- public:
-  MyAutoCommand();
+#include <frc/commands/Command.h>
+#include <frc/Encoder.h>
+
+class AutoCommand : public frc::Command {
+private:
+  //encoders for 4 drive motors
+  frc::Encoder encoderFL{0, 1};
+  frc::Encoder encoderRL{2, 3};
+  frc::Encoder encoderFR{4, 5};
+  frc::Encoder encoderRR{6, 7};
+
+  //target distance in feet
+  float targetDistance = 6.0;
+public:
+  AutoCommand();
   void Initialize() override;
   void Execute() override;
   bool IsFinished() override;

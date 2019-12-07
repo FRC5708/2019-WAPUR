@@ -16,7 +16,7 @@
 
 #include "OI.h"
 #include "commands/ExampleCommand.h"
-#include "commands/MyAutoCommand.h"
+#include "commands/AutoCommand.h"
 #include "subsystems/ExampleSubsystem.h"
 
 
@@ -38,7 +38,12 @@ class Robot : public frc::TimedRobot {
  public:
   static ExampleSubsystem m_subsystem;
   static OI m_oi;
+  frc::MecanumDrive m_robotDrive{m_frontLeft, m_rearLeft, m_frontRight,
+                                 m_rearRight};
+  
+  static Robot* instance;
 
+  Robot();
   void RobotInit() override;
   void RobotPeriodic() override;
   void DisabledInit() override;
@@ -61,16 +66,12 @@ class Robot : public frc::TimedRobot {
   MinOutputMotor<frc::Spark> m_rearLeft = MinOutputMotor<frc::Spark>(kRearLeftChannel);
   MinOutputMotor<frc::Spark> m_frontRight = MinOutputMotor<frc::Spark>(kFrontRightChannel);
   MinOutputMotor<frc::Spark> m_rearRight = MinOutputMotor<frc::Spark>(kRearRightChannel);
-  MinOutputMotor<frc::Spark> m_winch = MinOutputMotor<frc::Spark>(winchChannel,.15);
-
-  frc::MecanumDrive m_robotDrive{m_frontLeft, m_rearLeft, m_frontRight,
-                                 m_rearRight};
 
   frc::XboxController m_stick{kJoystickChannel};
   // Have it null by default so that if testing teleop it
   // doesn't have undefined behavior and potentially crash.
   frc::Command* m_autonomousCommand = nullptr;
   ExampleCommand m_defaultAuto;
-  MyAutoCommand m_myAuto;
+  AutoCommand m_myAuto;
   frc::SendableChooser<frc::Command*> m_chooser;
 };

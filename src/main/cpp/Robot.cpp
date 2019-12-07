@@ -19,6 +19,12 @@
 ExampleSubsystem Robot::m_subsystem;
 OI Robot::m_oi;
 
+Robot* Robot::instance;
+
+Robot::Robot(){
+  instance = this;
+}
+
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption("Default Auto", &m_defaultAuto);
   m_chooser.AddOption("My Auto", &m_myAuto);
@@ -70,15 +76,15 @@ void Robot::DisabledPeriodic() { frc::Scheduler::GetInstance()->Run(); }
  * the if-else structure below with additional strings & commands.
  */
 void Robot::AutonomousInit() {
-  // std::string autoSelected = frc::SmartDashboard::GetString(
+  //std::string autoSelected = frc::SmartDashboard::GetString(
   //     "Auto Selector", "Default");
   // if (autoSelected == "My Auto") {
-  //   m_autonomousCommand = &m_myAuto;
+  m_autonomousCommand = &m_myAuto;
   // } else {
   //   m_autonomousCommand = &m_defaultAuto;
   // }
 
-  m_autonomousCommand = m_chooser.GetSelected();
+  //m_autonomousCommand = m_chooser.GetSelected();
 
   if (m_autonomousCommand != nullptr) {
     m_autonomousCommand->Start();
