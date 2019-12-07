@@ -29,7 +29,7 @@ public:
 
   void Set(double val) {
     if (val == 0) BaseMotor::Set(0);
-    else BaseMotor::Set(val * (1 - minPower) + minPower);
+    else BaseMotor::Set(std::copysign(fabs(val) * (1 - minPower) + minPower, val));
   }
 };
 
