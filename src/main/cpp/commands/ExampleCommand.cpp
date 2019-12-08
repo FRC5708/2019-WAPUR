@@ -10,8 +10,8 @@
 #include "Robot.h"
 
 ExampleCommand::ExampleCommand() {
-  // Use Requires() here to declare subsystem dependencies
-  Requires(&Robot::m_subsystem);
+	// Use Requires() here to declare subsystem dependencies
+	Requires(&Robot::m_subsystem);
 }
 
 // Called just before this Command runs the first time

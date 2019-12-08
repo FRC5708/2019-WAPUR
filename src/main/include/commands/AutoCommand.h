@@ -11,22 +11,34 @@
 
 #include <frc/commands/Command.h>
 #include <frc/Encoder.h>
+#include <chrono>
+
 
 class AutoCommand : public frc::Command {
 private:
-  //encoders for 4 drive motors
-  frc::Encoder encoderFL{0, 1};
-  frc::Encoder encoderRL{2, 3};
-  frc::Encoder encoderFR{4, 5};
-  frc::Encoder encoderRR{6, 7};
+	//encoders for 4 drive motors
+	frc::Encoder encoderFL{0, 1};
+	frc::Encoder encoderRL{2, 3};
+	frc::Encoder encoderFR{4, 5};
+	frc::Encoder encoderRR{6, 7};
 
-  //target distance in feet
-  float targetDistance = 6.0;
+	std::chrono::time_point<std::chrono::steady_clock> startTime;
+
+	//target distance in feet
+	static constexpr float targetDistance = 6.0;
+
+	static constexpr bool USE_TIMER = true;
 public:
-  AutoCommand();
-  void Initialize() override;
-  void Execute() override;
-  bool IsFinished() override;
-  void End() override;
-  void Interrupted() override;
+	AutoCommand();
+	void Initialize() override;
+	void Execute() override;
+	bool IsFinished() override;
+	void End() override;
+
+private:
+	bool FinishedMoving();
+	void Reset();
+
+	bool wasRunning = false;
+
 };

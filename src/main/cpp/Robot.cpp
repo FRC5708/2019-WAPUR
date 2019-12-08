@@ -22,24 +22,24 @@ OI Robot::m_oi;
 Robot* Robot::instance;
 
 Robot::Robot(){
-  instance = this;
+	instance = this;
 }
 
 void Robot::RobotInit() {
-  m_chooser.SetDefaultOption("Default Auto", &m_defaultAuto);
-  m_chooser.AddOption("My Auto", &m_myAuto);
-  frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+	m_chooser.SetDefaultOption("Default Auto", &m_defaultAuto);
+	m_chooser.AddOption("My Auto", &m_myAuto);
+	frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
 }
 
 double removeDeadzone(double input, double inputRangeLow, double inputRangeHigh = 1, bool squareInput = true) {
 
 	double output = (fabs(input) - inputRangeLow) / (inputRangeHigh - inputRangeLow);
-  if (output > 1) output = 1;
+	if (output > 1) output = 1;
 	
 	if (output <= 0) return 0;
 
-  if (squareInput) output = output*output;
+	if (squareInput) output = output*output;
 
 	if (input < 0) output = -output;
 	return output;
@@ -76,36 +76,36 @@ void Robot::DisabledPeriodic() { frc::Scheduler::GetInstance()->Run(); }
  * the if-else structure below with additional strings & commands.
  */
 void Robot::AutonomousInit() {
-  //std::string autoSelected = frc::SmartDashboard::GetString(
-  //     "Auto Selector", "Default");
-  // if (autoSelected == "My Auto") {
-  m_autonomousCommand = &m_myAuto;
-  // } else {
-  //   m_autonomousCommand = &m_defaultAuto;
-  // }
+	//std::string autoSelected = frc::SmartDashboard::GetString(
+	//     "Auto Selector", "Default");
+	// if (autoSelected == "My Auto") {
+	m_autonomousCommand = &m_myAuto;
+	// } else {
+	//   m_autonomousCommand = &m_defaultAuto;
+	// }
 
-  //m_autonomousCommand = m_chooser.GetSelected();
+	//m_autonomousCommand = m_chooser.GetSelected();
 
-  if (m_autonomousCommand != nullptr) {
-    m_autonomousCommand->Start();
-  }
+	if (m_autonomousCommand != nullptr) {
+		m_autonomousCommand->Start();
+	}
 }
 
 void Robot::AutonomousPeriodic() { frc::Scheduler::GetInstance()->Run(); }
 
 void Robot::TeleopInit() {
-  // This makes sure that the autonomous stops running when
-  // teleop starts running. If you want the autonomous to
-  // continue until interrupted by another command, remove
-  // this line or comment it out.
-  if (m_autonomousCommand != nullptr) {
-    m_autonomousCommand->Cancel();
-    m_autonomousCommand = nullptr;
-  }
+	// This makes sure that the autonomous stops running when
+	// teleop starts running. If you want the autonomous to
+	// continue until interrupted by another command, remove
+	// this line or comment it out.
+	if (m_autonomousCommand != nullptr) {
+		m_autonomousCommand->Cancel();
+		m_autonomousCommand = nullptr;
+	}
 }
 
 void Robot::TeleopPeriodic() { 
-  frc::Scheduler::GetInstance()->Run();
+	frc::Scheduler::GetInstance()->Run();
 
   // triggers forward/back, left stick strafe, right stick turn
   /*m_robotDrive.DriveCartesian(
@@ -121,9 +121,9 @@ void Robot::TeleopPeriodic() {
     removeDeadzone(m_stick.GetTriggerAxis(frc::XboxController::JoystickHand::kRightHand) 
     - m_stick.GetTriggerAxis(frc::XboxController::JoystickHand::kLeftHand), 0.15));
 
-    if(m_stick.GetBumper(leftHand)) m_winch.Set(1);
-    else if(m_stick.GetBumper(rightHand)) m_winch.Set(-1);
-    else m_winch.Set(0);
+		if(m_stick.GetBumper(leftHand)) m_winch.Set(1);
+		else if(m_stick.GetBumper(rightHand)) m_winch.Set(-1);
+		else m_winch.Set(0);
 }
 
 
