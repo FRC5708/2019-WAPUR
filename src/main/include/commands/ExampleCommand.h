@@ -11,10 +11,10 @@
 
 class ExampleCommand : public frc::Command {
  public:
-  ExampleCommand();
-  void Initialize() override;
-  void Execute() override;
-  bool IsFinished() override;
-  void End() override;
-  void Interrupted() override;
+	ExampleCommand();
+	void Initialize() override;
+	void Execute() override;
+	bool IsFinished() override;
+	void End() override;
+	void Interrupted() override;
 };

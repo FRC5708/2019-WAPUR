@@ -9,5 +9,5 @@
 
 class OI {
  public:
-  OI();
+	OI();
 };
