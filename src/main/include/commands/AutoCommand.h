@@ -11,6 +11,8 @@
 
 #include <frc/commands/Command.h>
 #include <frc/Encoder.h>
+#include <chrono>
+
 
 class AutoCommand : public frc::Command {
 private:
@@ -20,13 +22,23 @@ private:
   frc::Encoder encoderFR{4, 5};
   frc::Encoder encoderRR{6, 7};
 
+  std::chrono::time_point<std::chrono::steady_clock> startTime;
+
   //target distance in feet
-  float targetDistance = 6.0;
+  static constexpr float targetDistance = 6.0;
+
+  static constexpr bool USE_TIMER = true;
 public:
   AutoCommand();
   void Initialize() override;
   void Execute() override;
   bool IsFinished() override;
   void End() override;
-  void Interrupted() override;
+
+private:
+  bool FinishedMoving();
+  void Reset();
+
+  bool wasRunning = false;
+
 };

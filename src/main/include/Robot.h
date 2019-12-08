@@ -66,6 +66,7 @@ class Robot : public frc::TimedRobot {
   MinOutputMotor<frc::Spark> m_rearLeft = MinOutputMotor<frc::Spark>(kRearLeftChannel);
   MinOutputMotor<frc::Spark> m_frontRight = MinOutputMotor<frc::Spark>(kFrontRightChannel);
   MinOutputMotor<frc::Spark> m_rearRight = MinOutputMotor<frc::Spark>(kRearRightChannel);
+  frc::Spark m_winch = frc::Spark(winchChannel);
 
   frc::XboxController m_stick{kJoystickChannel};
   // Have it null by default so that if testing teleop it
