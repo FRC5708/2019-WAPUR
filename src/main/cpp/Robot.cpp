@@ -107,12 +107,19 @@ void Robot::TeleopInit() {
 void Robot::TeleopPeriodic() { 
   frc::Scheduler::GetInstance()->Run();
 
-
-  m_robotDrive.DriveCartesian(
+  // triggers forward/back, left stick strafe, right stick turn
+  /*m_robotDrive.DriveCartesian(
     -removeDeadzone(m_stick.GetX(frc::XboxController::JoystickHand::kLeftHand), 0.15),
     removeDeadzone(m_stick.GetTriggerAxis(frc::XboxController::JoystickHand::kRightHand) 
     - m_stick.GetTriggerAxis(frc::XboxController::JoystickHand::kLeftHand), 0.15),
-    removeDeadzone(m_stick.GetX(frc::XboxController::JoystickHand::kRightHand), 0.15));
+    removeDeadzone(m_stick.GetX(frc::XboxController::JoystickHand::kRightHand), 0.15));*/
+
+    // left stick forward/back, right stick strafe, triggers turn
+    m_robotDrive.DriveCartesian(
+    -removeDeadzone(m_stick.GetX(frc::XboxController::JoystickHand::kRightHand), 0.15),
+    -removeDeadzone(m_stick.GetY(frc::XboxController::JoystickHand::kLeftHand), 0.15),
+    removeDeadzone(m_stick.GetTriggerAxis(frc::XboxController::JoystickHand::kRightHand) 
+    - m_stick.GetTriggerAxis(frc::XboxController::JoystickHand::kLeftHand), 0.15));
 
     if(m_stick.GetBumper(leftHand)) m_winch.Set(1);
     else if(m_stick.GetBumper(rightHand)) m_winch.Set(-1);
